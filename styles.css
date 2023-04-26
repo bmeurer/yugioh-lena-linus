@@ -76,10 +76,11 @@ footer {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 1em;
+  gap: 1em;
 }
 
 footer button {
   font-size: 3em;
-  margin: 1em;
   width: 280px;
 }

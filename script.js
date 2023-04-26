@@ -5,44 +5,6 @@ function beep() {
   snd.play();
 }
 
-window.addEventListener("load", () => {
-  for (const button of document.querySelectorAll("main button")) {
-    button.addEventListener("click", (event) => {
-      const increment = Number(event.target.innerText);
-      const { parentElement } = event.target;
-      const value = parentElement.querySelector(".punkte");
-      const n = Math.max(0, Number(value.innerText) + increment);
-      value.innerText = n;
-      if (n === 0) {
-        gameOver(parentElement);
-      }
-      beep();
-    });
-  }
-  
-  for (const key of ['spieler1', 'spieler2']) {
-    const name = document.querySelector(`#${key} > input`);
-    name.addEventListener('change', event => {
-      const {value} = event.target;
-      window.localStorage.setItem(key, value);
-    });
-  }
-  
-  restart();
-});
-
-function gameOver(looser) {
-  const [winner] = Array.from(document.querySelectorAll(".spieler")).filter(
-    (e) => e !== looser
-  );
-  
-  document.querySelector('#next').disabled = true;
-
-  const header = document.querySelector("header");
-  header.innerText = winner.querySelector("input").value + " gewinnt!";
-  updateButtons();
-}
-
 const START_PUNKTE = 6000;
 
 const PHASES = [
@@ -54,38 +16,91 @@ const PHASES = [
   'End Phase',
 ];
 
-function updateButtons() {
-  const header = document.querySelector('header');
-  const phase = PHASES.indexOf(header.innerText);
-  for (const button of document.querySelectorAll("main button")) {
-    button.disabled = (phase < 2 || phase > 4);
+const INITIAL_STATE = {
+  previous: null,
+  phase: 0,
+  scores: [START_PUNKTE, START_PUNKTE],
+  turn: 0,
+};
+
+let currentState = INITIAL_STATE;
+
+const spieler = document.querySelectorAll('.spieler');
+const header = document.querySelector('header');
+const buttons = document.querySelectorAll('main button');
+const undoButton = document.querySelector('button#undo');
+const nextButton = document.querySelector('button#next');
+const restartButton = document.querySelector('button#restart');
+  
+for (let index = 0; index < spieler.length; ++index) {
+  const key = `spieler${index + 1}`;
+  
+  const input = spieler[index].querySelector('input');
+  input.value = window.localStorage.getItem(key) ?? key;
+  input.addEventListener('change', ({target}) => window.localStorage.setItem(key, target.value));
+
+  for (const button of spieler[index].querySelectorAll('button')) {
+    button.addEventListener('click', ({target}) => {
+      const increment = Number(target.innerText);
+      const state = {
+        ...currentState,
+        previous: currentState,
+      };
+      state.scores = [...state.scores];
+      state.scores[index] = Math.max(0, state.scores[index] + increment);
+      setState(state);
+      beep();
+    });
   }
+}
+ 
+function setState(state) {
+  undoButton.disabled = state === INITIAL_STATE;
+  restartButton.disabled = state === INITIAL_STATE;
+  for (let index = 0; index < spieler.length; ++index) {
+    spieler[index].querySelector('.punkte').innerText = state.scores[index];
+  }
+  
+  if (Math.min(...state.scores) === 0) {
+    const {value} = spieler[state.scores[0] ? 0 : 1].querySelector('input');
+    header.innerText = `${value} gewinnt!`;
+    nextButton.disabled = true;
+    for (const button of buttons) {
+      button.disabled = true;
+    }
+    for (const s of spieler) {
+      s.classList.remove('active');
+    }
+  } else {
+    nextButton.disabled = false;
+    spieler[state.turn].classList.add('active');
+    spieler[1 - state.turn].classList.remove('active');
+    for (const button of buttons) {
+      button.disabled = (state.phase < 2 || state.phase > 4);
+    }
+    header.innerText = PHASES[state.phase];
+  }
+  currentState = state;
 }
 
 function next() {
-  const header = document.querySelector('header');
-  let phase = PHASES.indexOf(header.innerText);
-  phase = (phase + 1) % PHASES.length;
-  if (phase === 0) {
-    for (const key of ['spieler1', 'spieler2']) {
-      document.querySelector(`#${key}`).classList.toggle('active');
-    }
+  let state = {
+    ...currentState,
+    previous: currentState,
+  };
+  state.phase = (state.phase + 1) % PHASES.length;
+  if (state.phase === 0) {
+    state.turn = (state.turn + 1) % spieler.length;
   }
-  header.innerText = PHASES[phase];
-  updateButtons();
+  setState(state);
+}
+
+function undo() {
+  setState(currentState.previous);
 }
 
 function restart() {
-  document.querySelector('#spieler1').classList.add('active');
-  document.querySelector('#spieler2').classList.remove('active');
-  for (const key of ['spieler1', 'spieler2']) {
-    const name = document.querySelector(`#${key} > input`);
-    name.value = window.localStorage.getItem(key) ?? key;
-  }
-  for (const value of document.querySelectorAll(".punkte")) {
-    value.innerText = String(START_PUNKTE);
-  }
-  document.querySelector('header').innerText = PHASES[0];
-  document.querySelector('#next').disabled = true;
-  updateButtons();
+  setState(INITIAL_STATE);
 }
+
+restart();
