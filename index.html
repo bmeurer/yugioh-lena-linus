@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Yu-Gi-Oh!</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+    <script src="script.js" type="text/javascript"></script>
+  </head>
+  <body>
+    <header>Lena gewinnt!</header>
+    
+    <main>
+      <div id="spieler1" class="spieler active">
+        <input type="text" value="Linus">
+        <div class="punkte">6000</div>
+        <button>-1000</button>
+        <button>-100</button>
+        <button>-10</button>
+        <button>+1000</button>
+        <button>+100</button>
+        <button>+10</button>
+      </div>
+      
+      <div id="spieler2" class="spieler">
+        <input type="text" value="Lena">
+        <div class="punkte">6000</div>
+        <button>-1000</button>
+        <button>-100</button>
+        <button>-10</button>
+        <button>+1000</button>
+        <button>+100</button>
+        <button>+10</button>
+      </div>
+    </main>
+    
+    <footer>
+      <button id="undo" onclick="undo()">Zur&uuml;ck</button>
+      <button id="next" onclick="next()">Weiter</button>
+      <button id="restart" onclick="restart()">Neustart</button>
+    </footer>
+  </body>
+</html>

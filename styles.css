@@ -1,0 +1,85 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+
+* {
+  box-sizing: border-box;
+  font-family: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+
+.spieler {
+  background-color: rgb(208 209 211 / 70%);
+  padding: 16px;
+  margin: 16px;
+  border: 10px solid rgb(208 209 211);
+  display: grid;
+  grid-template-columns: 150px 150px;
+  grid-template-rows: 2.5em 3.5em repeat(3, 100px);
+  grid-auto-flow: column;
+}
+
+
+.spieler.active {
+  border-color: rgb(237 27 36);
+}
+
+.spieler > input {
+  font-size: 2em;
+  text-align: center;
+  grid-column: 1 / span 2;
+  grid-row: 1;
+}
+
+.spieler > .punkte {
+  font-size: 3em;
+  text-align: center;
+  grid-column: 1 / span 2;
+  grid-row: 2;
+  font-weight: bold;
+}
+
+.spieler > button {
+  margin: 5%;
+  font-size: 2em;
+}
+
+
+body {
+  font-family: 'Orbitron', cursive;
+}
+
+main {
+  background: no-repeat center url("https://yt3.googleusercontent.com/ytc/AL5GRJUB1RFyDa0ey61dbtfSz5_Sr_5viHiqxHKv4Zy-tQ=s900-c-k-c0x00ffffff-no-rj");
+  display: flex;
+  gap: 5vw;
+  justify-content: space-between;
+}
+
+
+header {
+  background-color: rgb(208 209 211 / 70%);
+  text-align: center;
+  font-size: 3em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  margin: 16px;
+  border: 10px solid rgb(208 209 211);
+  font-weight: bold;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+footer button {
+  font-size: 3em;
+  margin: 1em;
+  width: 280px;
+}
