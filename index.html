@@ -6,7 +6,13 @@
     <script src="script.js" type="text/javascript" defer></script>
   </head>
   <body>
-    <header>Lena gewinnt!</header>
+    <header>
+      <button id="undo" onclick="undo()" class="material-symbols-outlined">arrow_back</button>
+      <button id="next" onclick="next()" class="material-symbols-outlined">arrow_forward</button>
+      <span id="status">STATUS</span>
+      <span id="runde">RUNDE</span>
+      <button id="restart" onclick="restart()" class="material-symbols-outlined">restart_alt</button>
+    </header>
     
     <main>
       <div id="spieler1" class="spieler active">
@@ -33,9 +39,6 @@
     </main>
     
     <footer>
-      <button id="undo" onclick="undo()">Zur&uuml;ck</button>
-      <button id="next" onclick="next()">Weiter</button>
-      <button id="restart" onclick="restart()">Neustart</button>
     </footer>
   </body>
 </html>

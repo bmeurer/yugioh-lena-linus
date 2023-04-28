@@ -1,4 +1,9 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0');
+
+.material-symbols-outlined {
+  font-size: 48px;
+}
 
 * {
   box-sizing: border-box;
@@ -52,7 +57,7 @@ body {
 }
 
 main {
-  background: no-repeat center url("https://yt3.googleusercontent.com/ytc/AL5GRJUB1RFyDa0ey61dbtfSz5_Sr_5viHiqxHKv4Zy-tQ=s900-c-k-c0x00ffffff-no-rj");
+  background: no-repeat center/70% url("https://cdn.glitch.global/b9d17bfa-087e-4163-8c35-fcf119a91e9f/logo.jpg");
   display: flex;
   gap: 5vw;
   justify-content: space-between;
@@ -70,6 +75,11 @@ header {
   margin: 16px;
   border: 10px solid rgb(208 209 211);
   font-weight: bold;
+  gap: 10px;
+}
+
+header #status {
+  flex-grow: 1;
 }
 
 footer {
@@ -80,7 +90,3 @@ footer {
   gap: 1em;
 }
 
-footer button {
-  font-size: 3em;
-  width: 280px;
-}

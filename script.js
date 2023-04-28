@@ -26,7 +26,8 @@ const INITIAL_STATE = {
 let currentState = INITIAL_STATE;
 
 const spieler = document.querySelectorAll('.spieler');
-const header = document.querySelector('header');
+const status = document.querySelector('header #status');
+const runde = document.querySelector('header #runde');
 const buttons = document.querySelectorAll('main button');
 const undoButton = document.querySelector('button#undo');
 const nextButton = document.querySelector('button#next');
@@ -63,7 +64,8 @@ function setState(state) {
   
   if (Math.min(...state.scores) === 0) {
     const {value} = spieler[state.scores[0] ? 0 : 1].querySelector('input');
-    header.innerText = `${value} gewinnt!`;
+    status.innerText = `${value} gewinnt!`;
+    runde.setAttribute('hidden', 'true');
     nextButton.disabled = true;
     for (const button of buttons) {
       button.disabled = true;
@@ -73,12 +75,15 @@ function setState(state) {
     }
   } else {
     nextButton.disabled = false;
-    spieler[state.turn].classList.add('active');
-    spieler[1 - state.turn].classList.remove('active');
+    const activePlayer = state.turn % spieler.length;
+    spieler[activePlayer].classList.add('active');
+    spieler[1 - activePlayer].classList.remove('active');
     for (const button of buttons) {
       button.disabled = (state.phase < 2 || state.phase > 4);
     }
-    header.innerText = PHASES[state.phase];
+    runde.removeAttribute('hidden');
+    runde.innerText = `Runde ${state.turn + 1}`;
+    status.innerText = PHASES[state.phase];
   }
   currentState = state;
 }
@@ -90,7 +95,7 @@ function next() {
   };
   state.phase = (state.phase + 1) % PHASES.length;
   if (state.phase === 0) {
-    state.turn = (state.turn + 1) % spieler.length;
+    state.turn = state.turn + 1;
   }
   setState(state);
 }
